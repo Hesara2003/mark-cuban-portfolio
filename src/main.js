@@ -347,23 +347,53 @@ function initGSAPAnimations() {
     stagger: 0.3
   })
 
-  // Stats counter animation
-  gsap.fromTo('.stat-number', {
-    innerText: 0,
-    opacity: 0
-  }, {
-    innerText: (i, target) => target.dataset.value,
-    opacity: 1,
-    duration: 2,
-    ease: 'power2.out',
-    snap: { innerText: 1 },
-    stagger: 0.1,
-    scrollTrigger: {
-      trigger: '.stats-container',
+  // Stats counter animation with Cuban flair
+  document.querySelectorAll('.stat-number').forEach((counter, index) => {
+    ScrollTrigger.create({
+      trigger: counter,
       start: 'top 80%',
-      toggleActions: 'play none none reverse'
-    }
-  })
+      onEnter: () => {
+        gsap.fromTo(counter, {
+          innerText: 0,
+          opacity: 0
+        }, {
+          innerText: counter.dataset.value,
+          opacity: 1,
+          duration: 2,
+          ease: 'power2.out',
+          snap: { innerText: 1 }
+        });
+        
+        // Add Cuban-style exclamation
+        const exclamations = ['💰', '🚀', '🦈', '🔥'];
+        const exclamation = document.createElement('span');
+        exclamation.textContent = exclamations[index % exclamations.length];
+        exclamation.className = 'absolute -top-2 -right-2 text-lg stat-exclamation';
+        counter.parentElement.style.position = 'relative';
+        counter.parentElement.appendChild(exclamation);
+        
+        gsap.fromTo(exclamation, {
+          scale: 0,
+          rotation: -180
+        }, {
+          scale: 1,
+          rotation: 0,
+          duration: 0.6,
+          ease: 'back.out(1.7)'
+        });
+        
+        // Remove exclamation after animation
+        setTimeout(() => {
+          gsap.to(exclamation, {
+            scale: 0,
+            opacity: 0,
+            duration: 0.3,
+            onComplete: () => exclamation.remove()
+          });
+        }, 2000);
+      }
+    });
+  });
 
   // Media cards hover animations
   document.querySelectorAll('.media-card').forEach(card => {
@@ -527,5 +557,3 @@ function initGSAPAnimations() {
     }
   })
 }
-
-
