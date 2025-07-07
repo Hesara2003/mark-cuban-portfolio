@@ -5,13 +5,16 @@ import Hero from './components/Hero'
 import About from './components/About'
 import Portfolio from './components/Portfolio'
 import Investments from './components/Investments'
+import SharkTankSimulator from './components/SharkTankSimulator'
 import Media from './components/Media'
 import Contact from './components/Contact'
 import Footer from './components/Footer'
+import LoadingScreen from './components/LoadingScreen'
 import AOS from 'aos'
 import 'aos/dist/aos.css'
 import { gsap } from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
+import './shark-tank-simulator.js'
 
 // Register GSAP plugins
 gsap.registerPlugin(ScrollTrigger)
@@ -25,11 +28,13 @@ AOS.init({
 })
 
 document.querySelector('#app').innerHTML = `
+  ${LoadingScreen()}
   ${Navbar()}
   ${Hero()}
   ${About()}
   ${Portfolio()}
   ${Investments()}
+  ${SharkTankSimulator()}
   ${Media()}
   ${Contact()}
   ${Footer()}
@@ -46,6 +51,134 @@ setTimeout(() => {
 }, 100)
 
 function initGSAPAnimations() {
+  // Cuban Quotes for Loading Screen
+  const cubanQuotes = [
+    "Work like there is someone working 24 hours a day to take it all away from you.",
+    "It doesn't matter how many times you fail. You only have to be right once.",
+    "The stock market is probably the most expensive casino in the world.",
+    "I love to compete. To me, business is the ultimate sport.",
+    "Sweat equity is the most valuable equity there is.",
+    "Everyone has got the will to win; it's only those with the will to prepare that do win.",
+    "In business, to be a success, you only have to be right once.",
+    "If you're prepared and you know what it takes, it's not a risk. You just have to figure out how to get there.",
+    "You've got to be very careful if you don't know where you are going, because you might not get there.",
+    "The key is to live life on your own terms. Don't let the noise of others' opinions drown out your inner voice."
+  ];
+
+  // Loading Screen Animation
+  let currentQuoteIndex = 0;
+  let loadingProgress = 0;
+  
+  // Animate loading screen
+  const loadingSteps = [
+    { text: "Loading your empire...", progress: 20 },
+    { text: "Counting your money...", progress: 40 },
+    { text: "Preparing the sharks...", progress: 60 },
+    { text: "Building your portfolio...", progress: 80 },
+    { text: "Ready to dominate!", progress: 100 }
+  ];
+  
+  let currentStep = 0;
+  
+  // Quote rotation
+  const rotateQuote = () => {
+    gsap.fromTo('#cuban-quote', {
+      opacity: 1,
+      y: 0
+    }, {
+      opacity: 0,
+      y: -20,
+      duration: 0.5,
+      onComplete: () => {
+        currentQuoteIndex = (currentQuoteIndex + 1) % cubanQuotes.length;
+        document.getElementById('cuban-quote').textContent = cubanQuotes[currentQuoteIndex];
+        gsap.fromTo('#cuban-quote', {
+          opacity: 0,
+          y: 20
+        }, {
+          opacity: 1,
+          y: 0,
+          duration: 0.5
+        });
+      }
+    });
+  };
+  
+  // Loading progress animation
+  const updateLoading = () => {
+    if (currentStep < loadingSteps.length) {
+      const step = loadingSteps[currentStep];
+      
+      // Update progress bar
+      gsap.to('#loading-progress', {
+        width: step.progress + '%',
+        duration: 0.8,
+        ease: 'power2.out'
+      });
+      
+      // Update loading text
+      gsap.fromTo('#loading-text', {
+        opacity: 1
+      }, {
+        opacity: 0,
+        duration: 0.3,
+        onComplete: () => {
+          document.getElementById('loading-text').textContent = step.text;
+          gsap.to('#loading-text', {
+            opacity: 1,
+            duration: 0.3
+          });
+        }
+      });
+      
+      // Animate loading icons
+      gsap.to(`#icon-${(currentStep % 4) + 1}`, {
+        opacity: 1,
+        scale: 1.2,
+        duration: 0.3,
+        yoyo: true,
+        repeat: 1
+      });
+      
+      currentStep++;
+      
+      if (currentStep < loadingSteps.length) {
+        setTimeout(updateLoading, 1200);
+      } else {
+        // Loading complete - hide loading screen
+        setTimeout(() => {
+          gsap.to('#loading-screen', {
+            opacity: 0,
+            duration: 1,
+            ease: 'power2.out',
+            onComplete: () => {
+              document.getElementById('loading-screen').style.display = 'none';
+              // Initialize AOS after loading
+              AOS.refresh();
+            }
+          });
+        }, 800);
+      }
+    }
+  };
+  
+  // Start loading animation
+  setTimeout(updateLoading, 1000);
+  
+  // Start quote rotation
+  setInterval(rotateQuote, 3000);
+  
+  // Loading screen title animation
+  gsap.fromTo('.loading-title', {
+    scale: 0.8,
+    opacity: 0
+  }, {
+    scale: 1,
+    opacity: 1,
+    duration: 1.5,
+    ease: 'back.out(1.7)'
+  });
+
   // Navbar animation
   gsap.fromTo('#navbar', {
     y: -100,
@@ -394,3 +527,5 @@ function initGSAPAnimations() {
     }
   })
 }
+
+

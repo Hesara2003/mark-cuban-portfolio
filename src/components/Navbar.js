@@ -24,6 +24,10 @@ export default function Navbar() {
               Investments
               <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-accent transition-all duration-200 group-hover:w-full"></span>
             </a></li>
+            <li><a href="#simulator" class="text-gray-300 hover:text-accent transition-colors duration-200 relative group">
+              🦈 Simulator
+              <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-accent transition-all duration-200 group-hover:w-full"></span>
+            </a></li>
             <li><a href="#media" class="text-gray-300 hover:text-accent transition-colors duration-200 relative group">
               Media
               <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-accent transition-all duration-200 group-hover:w-full"></span>
@@ -47,6 +51,7 @@ export default function Navbar() {
             <li><a href="#about" class="block text-gray-300 hover:text-accent transition-colors duration-200">About</a></li>
             <li><a href="#portfolio" class="block text-gray-300 hover:text-accent transition-colors duration-200">Portfolio</a></li>
             <li><a href="#investments" class="block text-gray-300 hover:text-accent transition-colors duration-200">Investments</a></li>
+            <li><a href="#simulator" class="block text-gray-300 hover:text-accent transition-colors duration-200">🦈 Simulator</a></li>
             <li><a href="#media" class="block text-gray-300 hover:text-accent transition-colors duration-200">Media</a></li>
             <li><a href="#contact" class="block text-gray-300 hover:text-accent transition-colors duration-200">Contact</a></li>
           </ul>
